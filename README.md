@@ -23,10 +23,7 @@ In `.releaserc`:
   ]
   "success": [
     "@semantic-release/github",
-    {
-      path: "semantic-release-jira",
-      tagPrefix: "released-in:"
-    }
+    "semantic-release-jira"
   ]
 }
 ```

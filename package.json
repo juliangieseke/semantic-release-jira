@@ -1,15 +1,36 @@
 {
-  "name": "semantic-release-jira",
-  "version": "0.0.0-dev",
-  "description": "semantic release jira plugin",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "jest"
-  },
   "author": "Julian Gieseke",
-  "license": "Apache-2.0",
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {},
+  "description": "semantic release jira plugin",
   "devDependencies": {
+    "@commitlint/cli": "^7.0.0",
+    "@commitlint/config-conventional": "^7.0.1",
+    "commitizen": "^2.10.1",
+    "cz-conventional-changelog": "^2.1.0",
+    "husky": "^0.14.3",
     "jest": "^23.5.0",
     "semantic-release": "^15.9.9"
-  }
+  },
+  "license": "Apache-2.0",
+  "main": "src/index.js",
+  "name": "semantic-release-jira",
+  "release": {
+    "branch": "master"
+  },
+  "scripts": {
+    "commit": "git-cz",
+    "commitmsg": "commitlint -E GIT_PARAMS",
+    "test": "jest"
+  },
+  "version": "0.0.0-dev"
 }

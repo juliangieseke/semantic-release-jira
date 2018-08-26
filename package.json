@@ -27,7 +27,6 @@
   "name": "semantic-release-jira",
   "release": {
     "branch": "master",
-    "npmPublish": false,
     "success": [
       "@semantic-release/github"
     ],

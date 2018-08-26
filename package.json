@@ -19,7 +19,8 @@
     "cz-conventional-changelog": "^2.1.0",
     "husky": "^0.14.3",
     "jest": "^23.5.0",
-    "semantic-release": "^15.9.9"
+    "semantic-release": "^15.9.9",
+    "travis-deploy-once": "^5.0.3"
   },
   "license": "Apache-2.0",
   "main": "src/index.js",
@@ -27,10 +28,18 @@
   "release": {
     "branch": "master"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juliangieseke/semantic-release-jira.git"
+  },
   "scripts": {
+    "precommit": "jest",
     "commit": "git-cz",
     "commitmsg": "commitlint -E GIT_PARAMS",
-    "test": "jest"
+    "test": "jest",
+    "presemantic-release": "jest",
+    "semantic-release": "semantic-release",
+    "travis-deploy-once": "travis-deploy-once"
   },
-  "version": "0.0.0-dev"
+  "version": "0.0.0-development"
 }

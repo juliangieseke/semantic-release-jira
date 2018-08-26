@@ -26,7 +26,15 @@
   "main": "src/index.js",
   "name": "semantic-release-jira",
   "release": {
-    "branch": "master"
+    "branch": "master",
+    "npmPublish": false,
+    "success": [
+      "@semantic-release/github"
+    ],
+    "verifyConditions": [
+      "@semantic-release/github",
+      "@semantic-release/npm"
+    ]
   },
   "repository": {
     "type": "git",

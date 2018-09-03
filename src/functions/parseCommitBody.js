@@ -13,11 +13,16 @@ const parseCommitBody = function(body) {
   const bodyLines = body.trim().split("\n");
   const lastEmptyLine = bodyLines.lastIndexOf("");
 
-  return bodyLines
+  const matches = bodyLines
     .slice(lastEmptyLine)
     .join("\n")
-    .match(regEx)
-    .map(match => match.replace(/\"|updates|resolves|closes\s/gi, "").trim());
+    .match(regEx);
+
+  return matches !== null
+    ? matches.map(match =>
+        match.replace(/\"|updates|resolves|closes\s/gi, "").trim()
+      )
+    : [];
 };
 
 module.exports = { parseCommitBody };

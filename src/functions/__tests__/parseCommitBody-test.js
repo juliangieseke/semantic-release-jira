@@ -5,6 +5,10 @@ describe("parseCommitBody", () => {
     expect(parseCommitBody()).toEqual([]);
   });
 
+  it("returns empty array for non matching string", () => {
+    expect(parseCommitBody("foobar")).toEqual([]);
+  });
+
   it("returns correct match for single issue", () => {
     expect(parseCommitBody("closes ISSUE-12345")).toEqual(["ISSUE-12345"]);
   });

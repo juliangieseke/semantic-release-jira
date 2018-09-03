@@ -51,17 +51,32 @@ async function success(pluginConfig, context) {
       .map(async issueKey => {
         const url = template(apiURL)({ issueKey });
         try {
+          logger.debug(`Updating ${issueKey} with ${body}`);
+
           const response = await fetch(url, {
             ...fetchOptions,
             body
           });
-          logger.success(`Successfully updated Issue: ${issueKey}`);
-          logger.debug(
-            `API Response (Code: ${response.status}): ${await response.text()}`
-          );
+
+          if (!response.ok) {
+            const responseText = await response.text();
+            logger.error(
+              `Error updating ${issueKey} (Code: ${
+                response.status
+              }): ${responseText}`
+            );
+            return {
+              type: "error",
+              issueKey,
+              statusCode: response.status,
+              responseText
+            };
+          }
+
+          logger.success(`Successfully updated ${issueKey}`);
           return { type: "success", issueKey, statusCode: response.status };
         } catch (error) {
-          logger.error(`Error (${issueKey}): `, error);
+          logger.error(`Error trying to update ${issueKey}: `, error);
           return { type: "error", issueKey, error };
         }
       })

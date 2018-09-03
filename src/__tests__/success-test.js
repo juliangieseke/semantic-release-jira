@@ -125,7 +125,7 @@ describe("success", () => {
       )
     ).resolves.toBeTruthy();
     expect(successLogger).toHaveBeenCalledWith(
-      `Successfully updated Issue: ${issueKey}`
+      `Successfully updated ${issueKey}`
     );
     expect(errorLogger).not.toHaveBeenCalled();
   });

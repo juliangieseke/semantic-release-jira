@@ -90,16 +90,16 @@ describe("success", () => {
     );
   });
 
-  it("correctly sets authentication header", async () => {
+  it("correctly sets authorization header", async () => {
     expect.assertions(1);
     const { apiURL, apiJSON } = validConfig;
     const config = { apiURL, apiJSON };
 
     await success(config, { ...validContext });
 
-    expect(fetch.mock.calls[0][1].headers.Authentication).toEqual(
+    expect(fetch.mock.calls[0][1].headers.Authorization).toEqual(
       `Basic ${Buffer.from(
-        validContext.env.JIRA_NAME + ":" + validContext.env.JIRA_PASS
+        validContext.env.JIRA_USER + ":" + validContext.env.JIRA_PASS
       ).toString("base64")}`
     );
   });

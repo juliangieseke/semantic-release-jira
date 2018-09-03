@@ -36,8 +36,8 @@ async function success(pluginConfig, context) {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authentication: `Basic ${Buffer.from(
-        env.JIRA_NAME + ":" + env.JIRA_PASS
+      Authorization: `Basic ${Buffer.from(
+        env.JIRA_USER + ":" + env.JIRA_PASS
       ).toString("base64")}`
     }
   };

@@ -98,9 +98,9 @@ describe("success", () => {
     await success(config, { ...validContext });
 
     expect(fetch.mock.calls[0][1].headers.Authentication).toEqual(
-      `Basic ${btoa(
-        validContext.env.USER_NAME + ":" + validContext.env.USER_PASS
-      )}`
+      `Basic ${Buffer.from(
+        validContext.env.JIRA_NAME + ":" + validContext.env.JIRA_PASS
+      ).toString("base64")}`
     );
   });
 

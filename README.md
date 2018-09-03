@@ -27,7 +27,7 @@ In `.releaserc`:
     {
       "path": "semantic-release-jira",
       "apiURL": "https://jira.yourdomain.com/${issueKey}",
-      "apiJSON": '{ update: { labels: [ { add: "released-in:${version}" } ] } }'
+      "apiJSON": '{ "update": { "labels": [ { "add": "released-in:${version}" } ] } }'
     }
   ]
 }

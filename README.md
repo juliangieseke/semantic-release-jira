@@ -57,4 +57,4 @@ JIRA REST API V2 URL - template string is parsed by [\_.template](https://lodash
 
 #### `apiJSON`
 
-JIRA REST API V2 Operation ([Examples](https://developer.atlassian.com/server/jira/platform/updating-an-issue-via-the-jira-rest-apis-6848604/))- template string is parsed by [\_.template](https://lodash.com/docs/4.17.10#template)
+JIRA REST API V2 Operation ([Examples](https://developer.atlassian.com/server/jira/platform/updating-an-issue-via-the-jira-rest-apis-6848604/))- JSON template string is parsed by [\_.template](https://lodash.com/docs/4.17.10#template)

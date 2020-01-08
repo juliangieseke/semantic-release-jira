@@ -9,7 +9,7 @@ const parseCommitBody = function(body) {
     return [];
   }
 
-  const regEx = /((updates|resolves|closes)\s(\"[^\"]+\"|[^,\s]+))/gi;
+  const regEx = /((updates?|resolves?|closes?):? \"?([A-Z][A-Z0-9_]+\-[0-9]+)\"?)/gi;
   const bodyLines = body.trim().split("\n");
   const lastEmptyLine = bodyLines.lastIndexOf("");
 
@@ -18,11 +18,14 @@ const parseCommitBody = function(body) {
     .join("\n")
     .match(regEx);
 
-  return matches !== null
-    ? matches.map(match =>
-        match.replace(/\"|updates|resolves|closes\s/gi, "").trim()
-      )
-    : [];
+  const issues =
+    matches !== null
+      ? matches.map(match =>
+          match.replace(/\"|updates?|resolves?|closes?:?\s/gi, "").trim()
+        )
+      : [];
+
+  return issues;
 };
 
 module.exports = { parseCommitBody };

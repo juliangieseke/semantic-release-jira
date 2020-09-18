@@ -11,8 +11,8 @@
     }
   },
   "dependencies": {
-    "lodash": "^4.17.15",
-    "node-fetch": "^2.2.0"
+    "lodash": "^4.17.20",
+    "node-fetch": "^2.6.1"
   },
   "description": "semantic release jira plugin",
   "devDependencies": {
@@ -21,10 +21,10 @@
     "commitizen": "^2.10.1",
     "cz-conventional-changelog": "^2.1.0",
     "husky": "^0.14.3",
-    "jest": "^23.5.0",
-    "jest-fetch-mock": "^1.6.5",
+    "jest": "^23.6.0",
+    "jest-fetch-mock": "^1.7.5",
     "semantic-release": "^15.14.0",
-    "travis-deploy-once": "^5.0.3"
+    "travis-deploy-once": "^5.0.11"
   },
   "license": "Apache-2.0",
   "main": "src/index.js",

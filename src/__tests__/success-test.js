@@ -75,7 +75,7 @@ describe("success", () => {
         }
       )
     ).resolves.toBeTruthy();
-    expect(successLogger).toHaveBeenCalledTimes(1);
+    expect(successLogger).toHaveBeenCalledTimes(2);
     expect(errorLogger).not.toHaveBeenCalled();
   });
 });

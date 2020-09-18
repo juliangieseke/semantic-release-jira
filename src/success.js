@@ -14,9 +14,6 @@ const { updateJIRA } = require("./functions/updateJIRA.js");
 async function success(pluginConfig, context) {
   const { commits, nextRelease, env, logger } = context;
   const { apiURL, versionTmpl } = pluginConfig;
-  const token = Buffer.from(env.JIRA_USER + ":" + env.JIRA_PASS).toString(
-    "base64"
-  );
 
   if (!apiURL) {
     logger.error("options.apiURL must be set and not empty");
@@ -26,10 +23,17 @@ async function success(pluginConfig, context) {
     logger.error("options.versionTmpl must be set and not empty");
     return;
   }
-  if (!token) {
-    logger.error("cant parse JIRA credentials");
+  if (!env.JIRA_USER || !env.JIRA_PASS) {
+    logger.error("missing JIRA creds");
     return;
   }
+
+  logger.success(
+    `Updating matching Issues using JIRA User is ${env.JIRA_USER}`
+  );
+  const token = Buffer.from(env.JIRA_USER + ":" + env.JIRA_PASS).toString(
+    "base64"
+  );
 
   const version = template(versionTmpl)({ version: nextRelease.version });
 

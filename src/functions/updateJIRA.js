@@ -4,7 +4,10 @@ const fetch = require("node-fetch");
 const updateJIRA = async (params) => {
   const { apiURL, token, version, issueKey, logger } = params;
 
-  logger.debug(`Updating JIRA ${issueKey} with ${version}`);
+  const body = template('{ "fixVersions": [ { add: "${version}" } ] }')({
+    version,
+  });
+  logger.debug(`Updating JIRA ${issueKey} with ${version} using body ${body}`);
 
   const response = await fetch(`${apiURL}issue/${issueKey}`, {
     method: "PUT",
@@ -12,9 +15,7 @@ const updateJIRA = async (params) => {
       "Content-Type": "application/json",
       Authorization: `Basic ${token}`,
     },
-    body: template('{ "fixVersions": [ { add: "${version}" } ] }')({
-      version,
-    }),
+    body,
   }).catch((e) => {
     logger.debug(e);
   });

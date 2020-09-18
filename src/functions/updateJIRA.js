@@ -4,7 +4,9 @@ const fetch = require("node-fetch");
 const updateJIRA = async (params) => {
   const { apiURL, token, version, issueKey, logger } = params;
 
-  const body = template('{ "fixVersions": [ { add: "${version}" } ] }')({
+  const body = template(
+    '{"update":{"fixVersions":[{"add":{"name":"${version}"}}]}}'
+  )({
     version,
   });
   logger.debug(`Updating JIRA ${issueKey} with ${version} using body ${body}`);

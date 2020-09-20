@@ -29,16 +29,6 @@
   "license": "Apache-2.0",
   "main": "src/index.js",
   "name": "semantic-release-jira",
-  "release": {
-    "branch": "master",
-    "success": [
-      "@semantic-release/github"
-    ],
-    "verifyConditions": [
-      "@semantic-release/github",
-      "@semantic-release/npm"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/juliangieseke/semantic-release-jira.git"

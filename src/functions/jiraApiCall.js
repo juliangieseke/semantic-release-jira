@@ -13,7 +13,7 @@ const jiraApiCall = async ({
   const parsedUrl = template(url)({ issueKey });
   const parsedBody = template(body)({ version, project });
 
-  logger.info(
+  logger.debug(
     `[${issueKey}] Starting action "${parsedUrl}" with body "${parsedBody}".`
   );
 
@@ -25,21 +25,19 @@ const jiraApiCall = async ({
     },
     body: parsedBody,
   }).catch((e) => {
-    logger.error(e);
+    return e;
   });
 
-  if (!response || response.status >= 400) {
-    logger.error(response);
-    logger.error(
-      `[${issueKey}] Action "${parsedUrl}" with body "${parsedBody}" failed. Check errors above.`
-    );
-    return false;
+  if (!response.ok) {
+    logger.debug(response);
+    logger.error(`[${issueKey}] Action "${parsedUrl}" failed.`);
+    return response;
   }
 
-  logger.success(
-    `[${issueKey}] Action "${parsedUrl}" with body "${parsedBody}" done.`
-  );
-  return true;
+  const json = await response.json();
+  logger.debug(json);
+  logger.success(`[${issueKey}] Action "${parsedUrl}" done.`);
+  return json;
 };
 
 module.exports = jiraApiCall;

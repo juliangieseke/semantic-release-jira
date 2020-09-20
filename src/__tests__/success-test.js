@@ -45,7 +45,7 @@ const validContext = {
   logger: {
     success: console.log,
     error: console.error,
-    debug: console.debug,
+    debug: () => {},
     info: console.info,
   },
   env: { JIRA_USER: "Bender", JIRA_PASS: "K1ll-aLL-hum4nz!" },
@@ -59,7 +59,7 @@ describe("success", () => {
   it("successfully updates issue with correct data", async () => {
     expect.assertions(1);
 
-    fetch.mockResponse(""); // mocks successfull API call
+    fetch.mockResponse(JSON.stringify({ json: true }));
     const r = success(
       { ...validConfig },
       {
@@ -69,6 +69,6 @@ describe("success", () => {
         },
       }
     );
-    expect(await r).toEqual([true, true, true, true, true, true, true, true]);
+    expect(await r).toEqual([{ json: true }, { json: true }]);
   });
 });

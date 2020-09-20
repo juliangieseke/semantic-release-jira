@@ -13,17 +13,17 @@ const action = {
     '{ "name": "FooComponent ${version}", "archived": false, "released": true, "project": "${project}"}',
 };
 const logger = {
-  success: console.log,
-  error: console.log,
-  debug: console.log,
-  info: console.log,
+  success: () => {},
+  error: () => {},
+  debug: () => {},
+  info: () => {},
 };
 
 describe("jiraApiCall", () => {
   it("is able to jiraApiCall (happy path)", async () => {
-    const successLogger = jest.fn(console.log);
+    const successLogger = jest.fn();
     expect.assertions(2);
-    fetch.once("");
+    fetch.mockResponse(JSON.stringify({ json: true }));
     expect(
       await jiraApiCall({
         issueKey,
@@ -32,9 +32,9 @@ describe("jiraApiCall", () => {
         action,
         logger: { ...logger, success: successLogger },
       })
-    ).toEqual(true);
+    ).toEqual({ json: true });
     expect(successLogger).toHaveBeenCalledWith(
-      `[FOO-12345] Action "https://jira.example.com/rest/api/2/versions" with body "{ "name": "FooComponent 1.1.1", "archived": false, "released": true, "project": "FOO"}" done.`
+      `[FOO-12345] Action "https://jira.example.com/rest/api/2/versions" done.`
     );
   });
 });

@@ -1,4 +1,4 @@
-const { parseCommitBody } = require("../parseCommitBody.js");
+const parseCommitBody = require("../parseCommitBody.js");
 
 describe("parseCommitBody", () => {
   describe("no matches", () => {

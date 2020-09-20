@@ -1,4 +1,4 @@
-const { getAuthHeader } = require("./functions/getAuthHeader");
+const getAuthHeader = require("./functions/getAuthHeader");
 
 /**
  * verifyConditions plugin method which checks passed in arguments
@@ -15,4 +15,4 @@ async function verifyConditions(pluginConfig, context) {
   return await !!getAuthHeader({ auth, env, logger });
 }
 
-module.exports = { verifyConditions };
+module.exports = verifyConditions;

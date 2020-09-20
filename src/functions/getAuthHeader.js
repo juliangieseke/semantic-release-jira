@@ -22,4 +22,4 @@ const getAuthHeader = ({ auth, env, logger }) => {
   return `${type} ${token}`;
 };
 
-module.exports = { getAuthHeader };
+module.exports = getAuthHeader;

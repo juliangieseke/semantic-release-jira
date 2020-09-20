@@ -4,7 +4,7 @@
  * @param {string} body message to parse
  * @returns {string[]} array containing issue numbers
  */
-const parseCommitBody = function(body) {
+const parseCommitBody = function (body) {
   if (!body) {
     return [];
   }
@@ -13,14 +13,11 @@ const parseCommitBody = function(body) {
   const bodyLines = body.trim().split("\n");
   const lastEmptyLine = bodyLines.lastIndexOf("");
 
-  const matches = bodyLines
-    .slice(lastEmptyLine)
-    .join("\n")
-    .match(regEx);
+  const matches = bodyLines.slice(lastEmptyLine).join("\n").match(regEx);
 
   const issues =
     matches !== null
-      ? matches.map(match =>
+      ? matches.map((match) =>
           match.replace(/\"|updates?|resolves?|closes?:?\s/gi, "").trim()
         )
       : [];
@@ -28,4 +25,4 @@ const parseCommitBody = function(body) {
   return issues;
 };
 
-module.exports = { parseCommitBody };
+module.exports = parseCommitBody;

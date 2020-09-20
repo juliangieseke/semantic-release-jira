@@ -1,4 +1,4 @@
-const { getAuthHeader } = require("../getAuthHeader.js");
+const getAuthHeader = require("../getAuthHeader.js");
 
 const auth = {
   type: "Basic",

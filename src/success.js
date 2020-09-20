@@ -1,8 +1,6 @@
-const { template } = require("lodash");
-
 const { parseCommitBody } = require("./functions/parseCommitBody.js");
-const { createVersion } = require("./functions/createVersion.js");
-const { updateJIRA } = require("./functions/updateJIRA.js");
+const { getAuthHeader } = require("./functions/getAuthHeader.js");
+const { jiraApiCall } = require("./functions/jiraApiCall.js");
 
 /**
  * success plugin method which updates JIRA Issues
@@ -12,73 +10,47 @@ const { updateJIRA } = require("./functions/updateJIRA.js");
  * @param {object} context plugin context passed in by semantic-release
  */
 async function success(pluginConfig, context) {
-  const { commits, nextRelease, env, logger } = context;
-  const { apiURL, versionTmpl } = pluginConfig;
+  const {
+    commits,
+    nextRelease: { version },
+    env,
+    logger,
+  } = context;
+  const { auth, actions } = pluginConfig;
 
-  if (!apiURL) {
-    logger.error("options.apiURL must be set and not empty");
-    return;
-  }
-  if (!versionTmpl) {
-    logger.error("options.versionTmpl must be set and not empty");
-    return;
-  }
-  if (!env.JIRA_USER || !env.JIRA_PASS) {
-    logger.error("missing JIRA creds");
+  const authHeader = getAuthHeader({ auth, env, logger });
+  if (!authHeader) {
     return;
   }
 
-  logger.success(
-    `Updating matching Issues using JIRA User is ${env.JIRA_USER}`
-  );
-  const token = Buffer.from(env.JIRA_USER + ":" + env.JIRA_PASS).toString(
-    "base64"
-  );
+  if (!actions.length) {
+    logger.error("no actions defined for matched JIRAs");
+    return;
+  }
 
-  const version = template(versionTmpl)({ version: nextRelease.version });
-
-  return Promise.all(
+  const results = Promise.all(
     commits
       .reduce((issueKeys, commit) => {
         const { body } = commit;
         return issueKeys.concat(parseCommitBody(body));
       }, [])
-      .map(async (issueKey) => {
-        logger.debug(`Updating ${issueKey} with ${version}`);
-
-        const versionCreated = await createVersion({
-          apiURL,
-          token,
-          version,
-          project: issueKey.split("-")[0],
-          logger,
-        });
-        if (!versionCreated) {
-          logger.error(
-            `Failed to create version ${version} for JIRA ${issueKey}`
-          );
-          return false;
-        }
-        const jiraUpdated = await updateJIRA({
-          apiURL,
-          token,
-          version,
-          issueKey,
-          logger,
-        });
-        if (!jiraUpdated) {
-          logger.error(
-            `Failed to update JIRA ${issueKey} with version ${version}`
-          );
-          return false;
-        }
-
-        logger.success(
-          `Successfully updated ${issueKey} with version ${version}`
+      .reduce((results, issueKey) => {
+        return results.concat(
+          actions.map(
+            async (action) =>
+              await jiraApiCall({
+                issueKey,
+                version,
+                authHeader,
+                action,
+                logger,
+              })
+          )
         );
-        return true;
-      })
+      }, [])
   );
+
+  return results;
 }
 
 module.exports = { success };

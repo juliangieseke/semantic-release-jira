@@ -1,6 +1,6 @@
-const { parseCommitBody } = require("./functions/parseCommitBody.js");
-const { getAuthHeader } = require("./functions/getAuthHeader.js");
-const { jiraApiCall } = require("./functions/jiraApiCall.js");
+const parseCommitBody = require("./functions/parseCommitBody.js");
+const getAuthHeader = require("./functions/getAuthHeader.js");
+const jiraApiCall = require("./functions/jiraApiCall.js");
 
 /**
  * success plugin method which updates JIRA Issues
@@ -53,4 +53,4 @@ async function success(pluginConfig, context) {
   return results;
 }
 
-module.exports = { success };
+module.exports = success;

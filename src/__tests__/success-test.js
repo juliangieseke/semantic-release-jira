@@ -1,7 +1,7 @@
 const fetch = require("jest-fetch-mock");
 jest.setMock("node-fetch", fetch);
 
-const { success } = require("../success.js");
+const success = require("../success.js");
 
 const testVersion = "1.0.0";
 const validConfig = {

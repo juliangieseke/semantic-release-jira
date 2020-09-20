@@ -1,4 +1,4 @@
-const { verifyConditions } = require("../verifyConditions.js");
+const verifyConditions = require("../verifyConditions.js");
 
 const validContext = {
   logger: {

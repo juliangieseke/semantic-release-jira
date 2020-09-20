@@ -42,4 +42,4 @@ const jiraApiCall = async ({
   return true;
 };
 
-module.exports = { jiraApiCall };
+module.exports = jiraApiCall;

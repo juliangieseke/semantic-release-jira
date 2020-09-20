@@ -1,7 +1,7 @@
 const fetch = require("jest-fetch-mock");
 jest.setMock("node-fetch", fetch);
 
-const { jiraApiCall } = require("../jiraApiCall.js");
+const jiraApiCall = require("../jiraApiCall.js");
 
 const issueKey = "FOO-12345";
 const version = "1.1.1";

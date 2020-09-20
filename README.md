@@ -24,11 +24,36 @@ In `.releaserc`:
   ]
   "success": [
     "@semantic-release/github",
-    {
-      "path": "semantic-release-jira",
-      "versionTmpl": "Some UI ${version}",
-      "apiURL": "https://jira.example.com/rest/api/2/",
-    }
+    ["semantic-release-jira", {
+      "auth": {
+        "type": "Bearer",
+        "userEnvVar": "JIRA_USER",
+        "passEnvVar": "JIRA_PASS",
+        "tokenEnvVar": undefined
+      }
+      "actions": [
+        {
+          "method": "POST",
+          "url": "https://jira.example.com/rest/api/2/versions",
+          "body": '{ "name": "${version}", "archived": false, "released": true, "project": "${project}"}'
+        },
+        {
+          "method": "PUT",
+          "url": "https://jira.example.com/rest/api/2/issues/${issueKey}",
+          "body": '{"update":{"labels":[{"add":"some-component:${version}"}]}}'
+        },
+        {
+          "method": "PUT",
+          "url": "https://jira.example.com/rest/api/2/issues/${issueKey}",
+          "body": '{"update":{"fixVersions":[{"add":{"name":"Some Component ${version}"}}]}}'
+        },
+        {
+          "method":"POST",
+          "url": "https://jira.d2iq.com/rest/api/2/issue/${issueKey}/transitions",
+          "body": '{"transition":{"id":151}}'
+        }
+      ]
+    }]
   ]
 }
 ```
@@ -51,10 +76,4 @@ This step doesnt support any options.
 
 ### `success` step
 
-#### `apiURL`
-
-JIRA REST API V2 URL - template string is parsed by [\_.template](https://lodash.com/docs/4.17.10#template)
-
-#### `apiJSON`
-
-JIRA REST API V2 Operation ([Examples](https://developer.atlassian.com/server/jira/platform/updating-an-issue-via-the-jira-rest-apis-6848604/))- JSON template string is parsed by [\_.template](https://lodash.com/docs/4.17.10#template)
+See example above.

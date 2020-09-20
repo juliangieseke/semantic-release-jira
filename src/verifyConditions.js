@@ -1,3 +1,5 @@
+const { getAuthHeader } = require("./functions/getAuthHeader");
+
 /**
  * verifyConditions plugin method which checks passed in arguments
  *
@@ -6,18 +8,11 @@
  * @async
  * @throws error messages for invalid or missing arguments
  */
-async function verifyConditions(_pluginConfig, context) {
-  const {
-    env: { JIRA_USER, JIRA_PASS }
-  } = context;
+async function verifyConditions(pluginConfig, context) {
+  const { env, logger } = context;
+  const { auth } = pluginConfig;
 
-  if (!JIRA_USER || !JIRA_PASS) {
-    throw new Error(
-      "Environment variables JIRA_USER and JIRA_PASS must be set and not empty"
-    );
-  }
-
-  return true;
+  return await !!getAuthHeader({ auth, env, logger });
 }
 
 module.exports = { verifyConditions };

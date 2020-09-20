@@ -3,19 +3,50 @@ jest.setMock("node-fetch", fetch);
 
 const { success } = require("../success.js");
 
-const issueKey = "issue-123";
 const testVersion = "1.0.0";
 const validConfig = {
-  versionTmpl: "Some UI ${version}",
-  apiURL: "https://jira.example.com/rest/api/2/",
+  auth: {
+    type: "Basic",
+    userEnvVar: "JIRA_USER",
+    passEnvVar: "JIRA_PASS",
+    tokenEnvVar: undefined,
+  },
+  actions: [
+    {
+      method: "POST",
+      url: "https://jira.example.com/rest/api/2/versions",
+      body:
+        '{ "name": "${version}", "archived": false, "released": true, "project": "${project}"}',
+    },
+    {
+      method: "PUT",
+      url: "https://jira.example.com/rest/api/2/issues/${issueKey}",
+      body: '{"update":{"labels":[{"add":"some-component:${version}"}]}}',
+    },
+    {
+      method: "PUT",
+      url: "https://jira.example.com/rest/api/2/issues/${issueKey}",
+      body:
+        '{"update":{"fixVersions":[{"add":{"name":"Some Component ${version}"}}]}}',
+    },
+    {
+      method: "POST",
+      url: "https://jira.d2iq.com/rest/api/2/issue/${issueKey}/transitions",
+      body: '{"transition":{"id":151}}',
+    },
+  ],
 };
 const validContext = {
   nextRelease: { version: testVersion },
-  commits: [{ body: `lorem\ncloses ${issueKey}`, commit: { short: "aaa" } }],
+  commits: [
+    { body: `lorem\ncloses issue-123`, commit: { short: "aaa" } },
+    { body: `lorem\nresolves issue-456`, commit: { short: "bbb" } },
+  ],
   logger: {
-    success: () => {},
-    error: () => {},
-    debug: console.log,
+    success: console.log,
+    error: console.error,
+    debug: console.debug,
+    info: console.info,
   },
   env: { JIRA_USER: "Bender", JIRA_PASS: "K1ll-aLL-hum4nz!" },
 };
@@ -25,57 +56,19 @@ describe("success", () => {
     fetch.resetMocks();
   });
 
-  it("logs error without given apiURL", async () => {
-    expect.assertions(1);
-    const errorLogger = jest.fn();
-    await success(
-      {},
-      {
-        ...validContext,
-        logger: { ...validContext.logger, error: errorLogger },
-      }
-    );
-    expect(errorLogger).toBeCalledWith(
-      "options.apiURL must be set and not empty"
-    );
-  });
-
-  it("logs error with empty apiURL", async () => {
-    expect.assertions(1);
-    const errorLogger = jest.fn(console.log);
-    await success(
-      { apiURL: "" },
-      {
-        ...validContext,
-        logger: { ...validContext.logger, error: errorLogger },
-      }
-    );
-    expect(errorLogger).toBeCalledWith(
-      "options.apiURL must be set and not empty"
-    );
-  });
-
   it("successfully updates issue with correct data", async () => {
-    expect.assertions(3);
-    const successLogger = jest.fn(console.log);
-    const errorLogger = jest.fn(console.log);
+    expect.assertions(1);
 
     fetch.mockResponse(""); // mocks successfull API call
-
-    await expect(
-      success(
-        { ...validConfig },
-        {
-          ...validContext,
-          logger: {
-            ...validContext.logger,
-            success: successLogger,
-            error: errorLogger,
-          },
-        }
-      )
-    ).resolves.toBeTruthy();
-    expect(successLogger).toHaveBeenCalledTimes(2);
-    expect(errorLogger).not.toHaveBeenCalled();
+    const r = success(
+      { ...validConfig },
+      {
+        ...validContext,
+        logger: {
+          ...validContext.logger,
+        },
+      }
+    );
+    expect(await r).toEqual([true, true, true, true, true, true, true, true]);
   });
 });

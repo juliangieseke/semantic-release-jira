@@ -28,29 +28,27 @@ async function success(pluginConfig, context) {
     return;
   }
 
-  const results = Promise.all(
-    commits
-      .reduce((issueKeys, commit) => {
-        const { body } = commit;
-        return issueKeys.concat(parseCommitBody(body));
-      }, [])
-      .reduce((results, issueKey) => {
-        return results.concat(
-          actions.map(
-            async (action) =>
-              await jiraApiCall({
-                issueKey,
-                version,
-                authHeader,
-                action,
-                logger,
-              })
-          )
-        );
-      }, [])
-  );
+  const issueKeys = commits.reduce((issueKeys, commit) => {
+    const { body } = commit;
+    return issueKeys.concat(parseCommitBody(body));
+  }, []);
 
-  return results;
+  const results = issueKeys.map((issueKey) =>
+    actions.reduce(
+      (p, action) =>
+        p.then(() =>
+          jiraApiCall({
+            issueKey,
+            version,
+            authHeader,
+            action,
+            logger,
+          })
+        ),
+      Promise.resolve()
+    )
+  );
+  return Promise.all(results);
 }
 
 module.exports = success;

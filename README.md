@@ -29,7 +29,7 @@ In `.releaserc`:
         "type": "Bearer",
         "userEnvVar": "JIRA_USER",
         "passEnvVar": "JIRA_PASS",
-        "tokenEnvVar": undefined
+        "tokenEnvVar": "JIRA_TOKEN"
       }
       "actions": [
         {
@@ -39,12 +39,12 @@ In `.releaserc`:
         },
         {
           "method": "PUT",
-          "url": "https://jira.example.com/rest/api/2/issues/${issueKey}",
+          "url": "https://jira.example.com/rest/api/2/issue/${issueKey}",
           "body": '{"update":{"labels":[{"add":"some-component:${version}"}]}}'
         },
         {
           "method": "PUT",
-          "url": "https://jira.example.com/rest/api/2/issues/${issueKey}",
+          "url": "https://jira.example.com/rest/api/2/issue/${issueKey}",
           "body": '{"update":{"fixVersions":[{"add":{"name":"Some Component ${version}"}}]}}'
         },
         {

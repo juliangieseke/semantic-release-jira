@@ -34,7 +34,9 @@ const jiraApiCall = async ({
     return response;
   }
 
-  const json = await response.json();
+  const json = await response.json().catch((e) => {
+    return e.toString();
+  });
   logger.debug(json);
   logger.success(`[${issueKey}] Action "${parsedUrl}" done.`);
   return json;

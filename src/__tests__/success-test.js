@@ -17,6 +17,9 @@ const validConfig = {
       url: "https://jira.example.com/rest/api/2/versions",
       body:
         '{ "name": "${version}", "archived": false, "released": true, "project": "${project}"}',
+      ignoreErrors: [
+        "A version with this name already exists in this project.",
+      ],
     },
     {
       method: "PUT",
